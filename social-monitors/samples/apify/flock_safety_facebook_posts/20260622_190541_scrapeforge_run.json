@@ -1,0 +1,93 @@
+{
+  "accountedChargedEventCounts": {
+    "apify-actor-start": 1,
+    "apify-default-dataset-item": 0
+  },
+  "actId": "F60Kx7YJNOmKmqQm3",
+  "buildId": "NDStrbFJgYlCfnloG",
+  "buildNumber": "1.0.15",
+  "chargedEventCounts": {
+    "apify-actor-start": 1,
+    "apify-default-dataset-item": 0
+  },
+  "containerUrl": "https://4ev73sebxczt.runs.apify.net",
+  "defaultDatasetId": "ng9OYw5bIk1sd8nag",
+  "defaultKeyValueStoreId": "RdpvWOidRdst4kWGG",
+  "defaultRequestQueueId": "lkQhJFYiNjrKYvUpv",
+  "exitCode": 0,
+  "finishedAt": "2026-06-22T19:05:41.827Z",
+  "generalAccess": "FOLLOW_USER_SETTING",
+  "id": "eZ5pECDDjMqK8zbud",
+  "meta": {
+    "origin": "API",
+    "userAgent": "Python-urllib/3.13"
+  },
+  "options": {
+    "build": "latest",
+    "diskMbytes": 512,
+    "isMaxTotalChargeUsdSetByUser": true,
+    "maxItems": 11,
+    "maxTotalChargeUsd": 0.03,
+    "memoryMbytes": 256,
+    "timeoutSecs": 300
+  },
+  "platformUsageBillingModel": "DEVELOPER",
+  "pricingInfo": {
+    "apifyMarginPercentage": 0.2,
+    "createdAt": "2026-03-21T01:05:58.910Z",
+    "isPriceChangeNotificationSuppressed": false,
+    "minimalMaxTotalChargeUsd": null,
+    "pricingModel": "PAY_PER_EVENT",
+    "pricingPerEvent": {
+      "actorChargeEvents": {
+        "apify-actor-start": {
+          "eventDescription": "Charged when the Actor starts running. Number of events charged depends on Actor memory (one event per GB, minimum one event).",
+          "eventPriceUsd": 5e-05,
+          "eventTitle": "Actor Start",
+          "isOneTimeEvent": true
+        },
+        "apify-default-dataset-item": {
+          "eventDescription": "Single result in the default dataset.",
+          "eventPriceUsd": 0.00259,
+          "eventTitle": "result",
+          "isPrimaryEvent": true
+        }
+      }
+    },
+    "startedAt": "2026-03-21T01:05:58.257Z"
+  },
+  "startedAt": "2026-06-22T19:05:36.247Z",
+  "stats": {
+    "computeUnits": 0.0003776388888888889,
+    "cpuAvgUsage": 1.5996039099750974,
+    "cpuCurrentUsage": 0,
+    "cpuMaxUsage": 78.98772670807453,
+    "durationMillis": 5438,
+    "inputBodyLen": 86,
+    "memAvgBytes": 36385836.21470461,
+    "memCurrentBytes": 0,
+    "memMaxBytes": 48476160,
+    "metamorph": 0,
+    "migrationCount": 0,
+    "netRxBytes": 22475,
+    "netTxBytes": 4462,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "resurrectCount": 0,
+    "runTimeSecs": 5.438
+  },
+  "status": "SUCCEEDED",
+  "storageIds": {
+    "datasets": {
+      "default": "ng9OYw5bIk1sd8nag"
+    },
+    "keyValueStores": {
+      "default": "RdpvWOidRdst4kWGG"
+    },
+    "requestQueues": {
+      "default": "lkQhJFYiNjrKYvUpv"
+    }
+  },
+  "usageTotalUsd": 5e-05,
+  "userId": "G2kq9blZAmtYtOPCm"
+}
