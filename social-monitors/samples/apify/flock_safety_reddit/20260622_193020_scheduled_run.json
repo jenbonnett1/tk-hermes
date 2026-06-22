@@ -1,0 +1,52 @@
+{
+  "id": "eGB2WMQu8b1vdtiIL",
+  "actId": "MN5EqnkUzWk9cyNLq",
+  "status": "SUCCEEDED",
+  "statusMessage": "Crawl finished Successfully",
+  "startedAt": "2026-06-22T19:30:10.824Z",
+  "finishedAt": "2026-06-22T19:30:20.052Z",
+  "defaultDatasetId": "ejczW8ZaDKfDkbB1l",
+  "usage": null,
+  "usageTotalUsd": 0,
+  "chargedEventCounts": {
+    "init": 0,
+    "result": 0
+  },
+  "accountedChargedEventCounts": {
+    "init": 0,
+    "result": 0
+  },
+  "stats": {
+    "inputBodyLen": 365,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 9066,
+    "resurrectCount": 0,
+    "runTimeSecs": 9.066,
+    "metamorph": 0,
+    "computeUnits": 0.0012591666666666667,
+    "memAvgBytes": 88371396.99086876,
+    "memMaxBytes": 129421312,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": 2.4229660202912964,
+    "cpuMaxUsage": 86.70573893041978,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 263735,
+    "netTxBytes": 45760
+  },
+  "exitCode": 0,
+  "input_used": {
+    "searchTerms": [
+      "\"Flock Safety\""
+    ],
+    "searchPosts": true,
+    "searchComments": false,
+    "searchCommunities": false,
+    "searchSort": "new",
+    "searchTime": "day",
+    "maxPostsCount": 10,
+    "crawlCommentsPerPost": false,
+    "maxTotalChargeUsd": 0.04
+  }
+}

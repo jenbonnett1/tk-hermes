@@ -1,0 +1,62 @@
+{
+  "id": "D0ogWveKFtFRpMZIz",
+  "actId": "buIWk2uOUzTmcLsuB",
+  "status": "SUCCEEDED",
+  "statusMessage": null,
+  "startedAt": "2026-06-22T19:23:42.321Z",
+  "finishedAt": "2026-06-22T19:23:48.111Z",
+  "defaultDatasetId": "ARzmd9SxEbPCaaKnY",
+  "usage": null,
+  "usageTotalUsd": 5e-05,
+  "chargedEventCounts": {
+    "apify-actor-start": 1,
+    "post": 0,
+    "main-profile": 0,
+    "full-profile": 0,
+    "reaction": 0,
+    "comment": 0,
+    "no-result": 0
+  },
+  "accountedChargedEventCounts": {
+    "apify-actor-start": 1,
+    "post": 0,
+    "main-profile": 0,
+    "full-profile": 0,
+    "reaction": 0,
+    "comment": 0,
+    "no-result": 0
+  },
+  "stats": {
+    "inputBodyLen": 272,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 5616,
+    "resurrectCount": 0,
+    "runTimeSecs": 5.616,
+    "metamorph": 0,
+    "computeUnits": 0.00039,
+    "memAvgBytes": 39611268.25540897,
+    "memMaxBytes": 95395840,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": -0.3753367048400154,
+    "cpuMaxUsage": 24.526312264545837,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 73956,
+    "netTxBytes": 20213
+  },
+  "exitCode": 0,
+  "input_used": {
+    "searchQueries": [
+      "\"Flock Safety\""
+    ],
+    "maxPosts": 5,
+    "postedLimit": "24h",
+    "sortBy": "date",
+    "profileScraperMode": "short",
+    "scrapeReactions": false,
+    "scrapeComments": false,
+    "contentType": "all",
+    "maxTotalChargeUsd": 0.03
+  }
+}
