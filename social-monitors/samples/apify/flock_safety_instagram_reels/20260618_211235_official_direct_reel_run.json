@@ -1,0 +1,54 @@
+{
+  "id": "ORoPDDqyQQ3F53SGE",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-06-18T21:12:28.341Z",
+  "finishedAt": "2026-06-18T21:12:35.011Z",
+  "defaultDatasetId": "zOwhiaStLChk0FfFe",
+  "usage": null,
+  "usageTotalUsd": 0,
+  "chargedEventCounts": {
+    "reel": 0,
+    "actor-start": 1,
+    "shares-count": 0,
+    "transcript": 0,
+    "video-download": 0
+  },
+  "stats": {
+    "inputBodyLen": 208,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 6535,
+    "resurrectCount": 0,
+    "runTimeSecs": 6.535,
+    "metamorph": 0,
+    "computeUnits": 0.0018152777777777779,
+    "memAvgBytes": 52332687.29756422,
+    "memMaxBytes": 82231296,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": 1.4225578458580839,
+    "cpuMaxUsage": 88.06663414634146,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 61085,
+    "netTxBytes": 27144
+  },
+  "options": {
+    "build": "latest",
+    "timeoutSecs": 20000,
+    "memoryMbytes": 1024,
+    "maxTotalChargeUsd": 0.03,
+    "maxItems": null,
+    "isMaxTotalChargeUsdSetByUser": true,
+    "diskMbytes": 2048
+  },
+  "exitCode": 0,
+  "input_used": {
+    "username": [
+      "https://www.instagram.com/reel/DElZ56BSpPD/"
+    ],
+    "resultsLimit": 1,
+    "includeDownloadedVideo": false,
+    "includeTranscript": false,
+    "includeSharesCount": false
+  }
+}

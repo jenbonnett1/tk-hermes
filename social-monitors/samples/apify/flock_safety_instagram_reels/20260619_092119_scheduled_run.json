@@ -1,0 +1,39 @@
+{
+  "id": "IPApUJvrT11sCAcQT",
+  "actId": "TxU0ZBQIHdR20dr9C",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-06-19T09:21:07.928Z",
+  "finishedAt": "2026-06-19T09:21:18.457Z",
+  "defaultDatasetId": "6b0gluvxKel1cfwaj",
+  "usage": null,
+  "usageTotalUsd": 0.008,
+  "chargedEventCounts": {
+    "apify-actor-start": 4,
+    "apify-default-dataset-item": 0
+  },
+  "stats": {
+    "inputBodyLen": 37,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 10370,
+    "resurrectCount": 0,
+    "runTimeSecs": 10.37,
+    "metamorph": 0,
+    "computeUnits": 0.011522222222222222,
+    "memAvgBytes": 41472405.24901259,
+    "memMaxBytes": 51130368,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": 0.5343451525130143,
+    "cpuMaxUsage": 85.75169719169719,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 341785,
+    "netTxBytes": 106508
+  },
+  "exitCode": 0,
+  "input_used": {
+    "query": "Flock Safety",
+    "maxPages": 1,
+    "maxTotalChargeUsd": 0.05
+  }
+}

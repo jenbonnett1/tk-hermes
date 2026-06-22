@@ -1,0 +1,181 @@
+{
+  "jobs": [
+    {
+      "id": "60877de454f9",
+      "name": "Flock Safety X negative-post PR monitor",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Flock Safety and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com and CC gkeller@trevelinokeller.com using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Cc: gkeller@trevelinokeller.com\n  Subject: Flock Safety X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Flock Safety\n- X.com handle: @Flock_Safety\n- Treat references to \"Flock Safety\", \"FlockSafety\", \"Flock cameras\", \"Flock license plate readers\", \"Flock LPR\", and @Flock_Safety as potentially relevant when context clearly points to the company.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Flock Safety. Use one or more queries such as:\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety OR \"Flock cameras\" OR \"Flock LPR\" OR \"license plate readers\") (bad OR terrible OR awful OR hate OR broken OR outage OR unsafe OR dangerous OR privacy OR surveillance OR creepy OR lawsuit OR unconstitutional OR unethical OR disappointed OR cancelled OR boycott OR scam OR police OR data OR breach) -is:retweet lang:en`\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety) (criticism OR concerns OR backlash OR controversy OR complaint OR \"not good\" OR \"don't trust\" OR privacy OR surveillance OR lawsuit OR police) -is:retweet lang:en`\n   - `(@Flock_Safety OR \"Flock Safety\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Flock Safety the company. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, policy concern, privacy/surveillance concern, civil-liberties concern, security/data concern, legal/regulatory concern, product reliability complaint, law-enforcement/community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/flock_safety_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Flock Safety X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Flock Safety were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Flock Safety X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as privacy/surveillance, policing/civil liberties, data/security, product reliability, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 79
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-05-18T16:27:24.965576+00:00",
+      "next_run_at": "2026-06-22T19:33:39.299101+00:00",
+      "last_run_at": "2026-06-22T13:33:39.299101+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "8731322313",
+        "chat_name": "Jen Bonnett",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "f5fe98b2f004",
+      "name": "Belgard Hardscapes X negative-post PR monitor",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Belgard Hardscapes and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com and CC gkeller@trevelinokeller.com using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Cc: gkeller@trevelinokeller.com\n  Subject: Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Belgard Hardscapes\n- X.com handle: @Belgard\n- Treat references to \"Belgard\", \"Belgard Hardscapes\", \"Belgard pavers\", \"Belgard outdoor living\", \"Belgard retaining walls\", \"Belgard hardscape\", and @Belgard as potentially relevant when context clearly points to the company/brand.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Belgard Hardscapes. Use one or more queries such as:\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard OR \"Belgard pavers\" OR \"Belgard outdoor living\" OR \"Belgard retaining walls\") (bad OR terrible OR awful OR hate OR broken OR cracked OR defective OR warranty OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR poor OR problem OR problems OR failing OR failed OR delay OR cancelled OR boycott) -is:retweet lang:en`\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR warranty OR contractor OR dealer OR installer OR pavers OR hardscape) -is:retweet lang:en`\n   - `(@Belgard OR \"Belgard Hardscapes\" OR \"Belgard\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Belgard Hardscapes the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, dealer/contractor/installer concern, product quality or reliability complaint, warranty or service complaint, supply/delivery issue, legal/regulatory concern, safety concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/belgard_hardscapes_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Belgard Hardscapes were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/reliability, warranty/service, contractor/dealer/installer experience, supply/delivery issues, pricing/value, safety, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 71
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-03T19:28:59.777822+00:00",
+      "next_run_at": "2026-06-22T19:09:29.750741+00:00",
+      "last_run_at": "2026-06-22T13:09:29.750741+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "8731322313",
+        "chat_name": "Jen Bonnett",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "d7229aa0b9c2",
+      "name": "Johnston & Murphy X negative-post PR monitor",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Johnston & Murphy and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com and CC gkeller@trevelinokeller.com using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Cc: gkeller@trevelinokeller.com\n  Subject: Johnston & Murphy X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Johnston & Murphy\n- X.com handle: @johnstonmurphy\n- Treat references to \"Johnston & Murphy\", \"Johnston and Murphy\", \"Johnston Murphy\", \"J&M shoes\", \"J&M boots\", \"J&M apparel\", \"J&M\" only when context clearly points to the brand, and @johnstonmurphy as potentially relevant.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Johnston & Murphy. Use one or more queries such as:\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy OR \"J&M shoes\" OR \"J&M boots\") (bad OR terrible OR awful OR hate OR broken OR defective OR uncomfortable OR painful OR blisters OR quality OR poor OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR problem OR problems OR falling OR failed OR delay OR cancelled OR boycott OR return OR refund OR warranty OR customer service) -is:retweet lang:en`\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR quality OR shoes OR boots OR apparel OR customer service OR return OR refund OR shipping) -is:retweet lang:en`\n   - `(@johnstonmurphy OR \"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, fashion commentary that is not negative, and posts not actually about Johnston & Murphy the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, product quality or comfort complaint, sizing/fit complaint, durability complaint, warranty/service complaint, shipping/delivery issue, returns/refunds concern, pricing/value concern, legal/regulatory concern, store experience concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/johnston_murphy_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Johnston & Murphy were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com, CC gkeller@trevelinokeller.com. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/durability, fit/comfort, customer service, returns/refunds, shipping/delivery, pricing/value, store experience, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 68
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-04T16:54:04.658765+00:00",
+      "next_run_at": "2026-06-22T19:08:21.926832+00:00",
+      "last_run_at": "2026-06-22T13:08:21.926832+00:00",
+      "last_status": "error",
+      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "8731322313",
+        "chat_name": "Jen Bonnett",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "61cc9da25f0a",
+      "name": "Flock Safety Facebook/Instagram negative-post pilot monitor",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_fb_ig_monitor.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 360,
+        "display": "every 360m"
+      },
+      "schedule_display": "every 360m",
+      "repeat": {
+        "times": null,
+        "completed": 22
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-16T21:32:57.885203+00:00",
+      "next_run_at": "2026-06-22T15:44:56.677625+00:00",
+      "last_run_at": "2026-06-22T09:44:56.677625+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    }
+  ],
+  "updated_at": "2026-06-22T13:33:39.301337+00:00"
+}

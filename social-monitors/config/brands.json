@@ -1,0 +1,118 @@
+{
+  "report_recipients": {
+    "to": ["jennifercbonnett@gmail.com"],
+    "cc": ["gkeller@trevelinokeller.com"]
+  },
+  "brands": [
+    {
+      "id": "flock_safety",
+      "name": "Flock Safety",
+      "canonical_terms": [
+        "Flock Safety",
+        "FlockSafety",
+        "Flock cameras",
+        "Flock license plate readers",
+        "Flock LPR"
+      ],
+      "handles": {
+        "x": ["@Flock_Safety"],
+        "facebook": ["Flock Safety"],
+        "instagram": ["Flock Safety"]
+      },
+      "negative_keywords": [
+        "privacy",
+        "surveillance",
+        "lawsuit",
+        "unconstitutional",
+        "police",
+        "license plate reader",
+        "LPR",
+        "creepy",
+        "boycott",
+        "complaint",
+        "warning",
+        "dangerous",
+        "scam",
+        "illegal",
+        "tracking"
+      ],
+      "exclusions": [
+        "flock of birds",
+        "flock wallpaper",
+        "flock fabric"
+      ]
+    },
+    {
+      "id": "belgard_hardscapes",
+      "name": "Belgard Hardscapes",
+      "canonical_terms": [
+        "Belgard",
+        "Belgard Hardscapes",
+        "Belgard pavers",
+        "Belgard outdoor living",
+        "Belgard retaining walls"
+      ],
+      "handles": {
+        "x": ["@Belgard"],
+        "facebook": ["Belgard"],
+        "instagram": ["Belgard"]
+      },
+      "negative_keywords": [
+        "complaint",
+        "cracked",
+        "defective",
+        "warranty",
+        "lawsuit",
+        "bad experience",
+        "poor quality",
+        "do not buy",
+        "avoid",
+        "scam",
+        "angry",
+        "problem",
+        "issue"
+      ],
+      "exclusions": [
+        "Belgard Square",
+        "Belgard Road",
+        "Tallaght",
+        "Luas"
+      ]
+    },
+    {
+      "id": "johnston_murphy",
+      "name": "Johnston & Murphy",
+      "canonical_terms": [
+        "Johnston & Murphy",
+        "Johnston and Murphy",
+        "Johnston Murphy",
+        "J&M shoes",
+        "J&M boots"
+      ],
+      "handles": {
+        "x": ["@johnstonmurphy"],
+        "facebook": ["Johnston & Murphy"],
+        "instagram": ["Johnston & Murphy"]
+      },
+      "negative_keywords": [
+        "complaint",
+        "defective",
+        "poor quality",
+        "bad experience",
+        "return",
+        "warranty",
+        "do not buy",
+        "avoid",
+        "scam",
+        "angry",
+        "problem",
+        "issue",
+        "falling apart"
+      ],
+      "exclusions": [
+        "J&M Music",
+        "J&M Auto"
+      ]
+    }
+  ]
+}

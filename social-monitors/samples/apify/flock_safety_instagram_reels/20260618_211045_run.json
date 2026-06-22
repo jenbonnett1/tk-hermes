@@ -1,0 +1,58 @@
+{
+  "id": "CRSDAZSICgmBWpR8g",
+  "actId": "xMc5Ga1oCONPmWJIa",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-06-18T21:10:36.434Z",
+  "finishedAt": "2026-06-18T21:10:44.994Z",
+  "defaultDatasetId": "4uSH2B4xmLbeqBvYv",
+  "usage": null,
+  "usageTotalUsd": 0.001,
+  "chargedEventCounts": {
+    "reel": 0,
+    "actor-start": 1,
+    "shares-count": 0,
+    "transcript": 0,
+    "video-download": 0
+  },
+  "stats": {
+    "inputBodyLen": 206,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 8336,
+    "resurrectCount": 0,
+    "runTimeSecs": 8.336,
+    "metamorph": 0,
+    "computeUnits": 0.0023155555555555555,
+    "memAvgBytes": 81563959.67902437,
+    "memMaxBytes": 92839936,
+    "memCurrentBytes": 91734016,
+    "cpuAvgUsage": 1.2559844500139568,
+    "cpuMaxUsage": 31.369544895448954,
+    "cpuCurrentUsage": 0.7231565967940814,
+    "netRxBytes": 120060,
+    "netTxBytes": 45417
+  },
+  "options": {
+    "build": "latest",
+    "timeoutSecs": 20000,
+    "memoryMbytes": 1024,
+    "maxTotalChargeUsd": 0.1,
+    "maxItems": null,
+    "isMaxTotalChargeUsdSetByUser": true,
+    "diskMbytes": 2048
+  },
+  "buildId": "xNwbIVND328GoOu6G",
+  "exitCode": 0,
+  "input_used": {
+    "username": [
+      "flocksafety"
+    ],
+    "resultsLimit": 5,
+    "onlyPostsNewerThan": "30 days",
+    "skipPinnedPosts": true,
+    "includeDownloadedVideo": false,
+    "includeTranscript": false,
+    "includeSharesCount": false
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "id": "dVQO08raRi4sU2hHB",
+  "actId": "TxU0ZBQIHdR20dr9C",
+  "status": "SUCCEEDED",
+  "startedAt": "2026-06-18T21:11:30.721Z",
+  "finishedAt": "2026-06-18T21:11:38.841Z",
+  "defaultDatasetId": "JixZI9Ow8dTlujX2Z",
+  "usage": null,
+  "usageTotalUsd": 0.008,
+  "chargedEventCounts": {
+    "apify-actor-start": 4,
+    "apify-default-dataset-item": 0
+  },
+  "stats": {
+    "inputBodyLen": 37,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 7936,
+    "resurrectCount": 0,
+    "runTimeSecs": 7.936,
+    "metamorph": 0,
+    "computeUnits": 0.008817777777777779,
+    "memAvgBytes": 41203256.97761664,
+    "memMaxBytes": 46108672,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": 0.5675096747310154,
+    "cpuMaxUsage": 19.352610837438426,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 357530,
+    "netTxBytes": 102961
+  },
+  "options": {
+    "build": "latest",
+    "memoryMbytes": 4096,
+    "timeoutSecs": 3600,
+    "maxTotalChargeUsd": 0.05,
+    "maxItems": 20,
+    "isMaxTotalChargeUsdSetByUser": true,
+    "diskMbytes": 8192
+  },
+  "buildId": "QABm4IRLWA1ggONjA",
+  "exitCode": 0,
+  "input_used": {
+    "query": "Flock Safety",
+    "maxPages": 1
+  }
+}

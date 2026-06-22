@@ -1,0 +1,203 @@
+{
+  "tested_at_utc": "2026-06-18T21:12:01Z",
+  "actor": "patient_discovery/instagram-search-reels",
+  "query": "Flock Safety",
+  "cap": "maxPages=1, maxTotalChargeUsd=0.05",
+  "status": "SUCCEEDED",
+  "usage_total_usd": 0.008,
+  "charged_event_counts": {
+    "apify-actor-start": 4,
+    "apify-default-dataset-item": 0
+  },
+  "dataset_id": "JixZI9Ow8dTlujX2Z",
+  "run_id": "dVQO08raRi4sU2hHB",
+  "items": 12,
+  "summary": [
+    {
+      "url": "https://www.instagram.com/reel/DElZ56BSpPD/",
+      "owner": "reasonmagazine",
+      "caption_excerpt": "Have you heard about this mass surveillance program? Flock Safety cameras are artificial intelligence automatic license plate readers, and unlike others, they’re connected to a nationwide database. #technology #tech #cars #auto #car #cargram #bigbrother #1984",
+      "matched_terms": [
+        "surveillance",
+        "mass surveillance",
+        "1984"
+      ],
+      "ig_play_count": 1019249,
+      "like_count": 44054,
+      "comment_count": 7066,
+      "share_count": 37987,
+      "video_url_present": true,
+      "taken_at": 1736381954
+    },
+    {
+      "url": "https://www.instagram.com/reel/DWSTGn5Dp0G/",
+      "owner": "thefreefloridian",
+      "caption_excerpt": "Flock Safety takes billions of photos every month spying on millions of innocent Americans. Their work raises Fourth Amendment concerns by enabling broad, warrantless surveillance of law-abiding citizens, normalizing continuous government tracking. Privacy advocates warn that centralizing massive amounts of location data creates serious security vu",
+      "matched_terms": [
+        "surveillance",
+        "privacy",
+        "warrantless",
+        "spying",
+        "fourth amendment"
+      ],
+      "ig_play_count": 1076389,
+      "like_count": 86245,
+      "comment_count": 1852,
+      "share_count": 31218,
+      "video_url_present": true,
+      "taken_at": 1774395617
+    },
+    {
+      "url": "https://www.instagram.com/reel/DSyOLWREhvG/",
+      "owner": "argos_investigations",
+      "caption_excerpt": "🚨 Flock Safety Cameras Are on the Rise in Connecticut 🚨 These systems are appearing across neighborhoods, collecting data on vehicles and local activity. While promoted for safety, it’s worth being aware of the privacy implications behind the technology. Knowledge is power — stay informed, stay aware, and stay ahead. 📹 @s0phia_ops - credit #privacy",
+      "matched_terms": [
+        "privacy"
+      ],
+      "ig_play_count": 25216,
+      "like_count": 500,
+      "comment_count": 41,
+      "share_count": 1251,
+      "video_url_present": true,
+      "taken_at": 1766876768
+    },
+    {
+      "url": "https://www.instagram.com/reel/DUrXacqAaJ2/",
+      "owner": "reasonmagazine",
+      "caption_excerpt": "Should the images captured by 80,000 cameras surveilling Americans 24/7 be available to the public? Flock Safety is an Orwellian mass surveillance program using artificial intelligence automatic license plate readers connected to a nationwide database. Reason’s @BessByers covered it last year, and a lot has changed. #technology #tech #car #cars #Re",
+      "matched_terms": [
+        "surveillance",
+        "orwellian",
+        "mass surveillance"
+      ],
+      "ig_play_count": 302892,
+      "like_count": 21677,
+      "comment_count": 1095,
+      "share_count": 11896,
+      "video_url_present": true,
+      "taken_at": 1770941695
+    },
+    {
+      "url": "https://www.instagram.com/reel/DOtd8DyAJjY/",
+      "owner": "dirty.bastards.collective",
+      "caption_excerpt": "What is a Flock Camera? Flock Safety is a company that makes ALPR (Automatic License Plate Reader) cameras, which have been dispatched en masse over the past few years. The reasons to care about mass surveillance are plentiful, but today we’ll simply be talking about a few tools to help you be more aware of surveillance capabilities in your area. d",
+      "matched_terms": [
+        "surveillance",
+        "mass surveillance"
+      ],
+      "ig_play_count": 687423,
+      "like_count": 32115,
+      "comment_count": 697,
+      "share_count": 8137,
+      "video_url_present": true,
+      "taken_at": 1758128750
+    },
+    {
+      "url": "https://www.instagram.com/reel/DW6iRQ_DYD_/",
+      "owner": "debateherofficial",
+      "caption_excerpt": "FULL STORY: A crowd of people showed up last night to oppose Flock safety drones, and the board treated us as a nuisance and a problem to be solved. After starting the meeting almost an hour late, the board voted to move all public comment to the end of the meeting and proceeded to vote to approve Flock Drones without listening to a single word fro",
+      "matched_terms": [
+        "oppose",
+        "drones"
+      ],
+      "ig_play_count": 850007,
+      "like_count": 101060,
+      "comment_count": 4249,
+      "share_count": 22026,
+      "video_url_present": true,
+      "taken_at": 1775745776
+    },
+    {
+      "url": "https://www.instagram.com/reel/DYzUEvZuyUc/",
+      "owner": "popeofwallst",
+      "caption_excerpt": "The people you elected this year or last are the ones responsible for signing the Flock contract. If you would like to preserve your privacy and autonomy from a notorious 3rd Party culprit, I would reach out to them. I’m sure you can find them on the .gov website of your City or Town. They work for you and can unplug your community from the Panopti",
+      "matched_terms": [
+        "privacy",
+        "contract"
+      ],
+      "ig_play_count": 401517,
+      "like_count": 32280,
+      "comment_count": 1385,
+      "share_count": 6236,
+      "video_url_present": true,
+      "taken_at": 1779799006
+    },
+    {
+      "url": "https://www.instagram.com/reel/DXa3n3_jXtP/",
+      "owner": "jakeswiz",
+      "caption_excerpt": "Flock Safety security failure part ?? Finally, here’s the story after so many failed attempts: The flock-you project firmware wasn’t working in my area, so I was forced to write a modified version. Flipped from BLE-passive to WiFi, drove to known Flock spots, parked under an ALPR, waited for other cars to trip it. 12 probe requests from a single MA",
+      "matched_terms": [
+        "surveillance",
+        "privacy",
+        "security failure",
+        "failure"
+      ],
+      "ig_play_count": 937489,
+      "like_count": 73488,
+      "comment_count": 2025,
+      "share_count": 20767,
+      "video_url_present": true,
+      "taken_at": 1776831139
+    },
+    {
+      "url": "https://www.instagram.com/reel/DZoUxbbNUT5/",
+      "owner": "jasonfollowell",
+      "caption_excerpt": "If enough cameras are connected together, law enforcement can reconstruct where someone has traveled over days, weeks, or months, creating a form of mass surveillance. #FlockSafety #FourthAmendment #Constitution #PrivacyRights",
+      "matched_terms": [
+        "surveillance",
+        "privacy",
+        "mass surveillance"
+      ],
+      "ig_play_count": 21648,
+      "like_count": 2956,
+      "comment_count": 168,
+      "share_count": 730,
+      "video_url_present": true,
+      "taken_at": 1781577141
+    },
+    {
+      "url": "https://www.instagram.com/reel/DZomo-UtVHT/",
+      "owner": "debateherofficial",
+      "caption_excerpt": "FULL STORY: 6/15/26 Residents of Milford, MI showed up to oppose the renewal of Flock Safety. The board unanimously voted to cancel one contract for 5 cameras. The village has a second contract for 10 cameras that will be up for renewal later this year. The council anticipates voting on the second contract in August, and in the meantime they hope t",
+      "matched_terms": [
+        "oppose",
+        "contract"
+      ],
+      "ig_play_count": 195713,
+      "like_count": 18728,
+      "comment_count": 515,
+      "share_count": 3267,
+      "video_url_present": true,
+      "taken_at": 1781586584
+    },
+    {
+      "url": "https://www.instagram.com/reel/DY3AdoNuMjl/",
+      "owner": "conscious.spend",
+      "caption_excerpt": "First they put cameras on every street. Then they got caught letting federal agents search that data over a million times. Now Flock Safety has autonomous drones in the sky. The drones hit 60 mph. They read license plates from 2,000 feet. Already deployed in California, Washington, and Michigan. Flock is targeting 100 drone cities by the end of 202",
+      "matched_terms": [
+        "drones"
+      ],
+      "ig_play_count": 411231,
+      "like_count": 31300,
+      "comment_count": 1539,
+      "share_count": 26425,
+      "video_url_present": true,
+      "taken_at": 1779922868
+    },
+    {
+      "url": "https://www.instagram.com/reel/DZvZpcHPfsD/",
+      "owner": "atallcrossco",
+      "caption_excerpt": "Flock Safety cameras are AI-powered license plate readers quietly spreading across Texas — small black cameras on poles that scan every plate that drives by. The company has over 90,000 cameras nationwide and scans 20 billion plates per month. Around San Antonio, Texas, suburbs like Live Oak, New Braunfels, Texas, and Universal City, Texas have alr",
+      "matched_terms": [
+        "fourth amendment",
+        "contract"
+      ],
+      "ig_play_count": 19150,
+      "like_count": 807,
+      "comment_count": 42,
+      "share_count": 0,
+      "video_url_present": true,
+      "taken_at": 1781814699
+    }
+  ]
+}
