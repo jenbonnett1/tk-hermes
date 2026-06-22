@@ -1,0 +1,45 @@
+{
+  "id": "djLLDTPMvwFs5Ss0X",
+  "actId": "F60Kx7YJNOmKmqQm3",
+  "status": "SUCCEEDED",
+  "statusMessage": null,
+  "startedAt": "2026-06-22T19:15:39.307Z",
+  "finishedAt": "2026-06-22T19:15:48.728Z",
+  "defaultDatasetId": "EBW33DxA8VZkfKemW",
+  "usage": null,
+  "usageTotalUsd": 5e-05,
+  "chargedEventCounts": {
+    "apify-actor-start": 1,
+    "apify-default-dataset-item": 0
+  },
+  "accountedChargedEventCounts": {
+    "apify-actor-start": 1,
+    "apify-default-dataset-item": 0
+  },
+  "stats": {
+    "inputBodyLen": 86,
+    "migrationCount": 0,
+    "rebootCount": 0,
+    "restartCount": 0,
+    "durationMillis": 9220,
+    "resurrectCount": 0,
+    "runTimeSecs": 9.22,
+    "metamorph": 0,
+    "computeUnits": 0.0006402777777777778,
+    "memAvgBytes": 30587506.033256873,
+    "memMaxBytes": 46739456,
+    "memCurrentBytes": 0,
+    "cpuAvgUsage": 0.8161383840599088,
+    "cpuMaxUsage": 39.22465220643231,
+    "cpuCurrentUsage": 0,
+    "netRxBytes": 25204,
+    "netTxBytes": 4678
+  },
+  "exitCode": 0,
+  "input_used": {
+    "query": "\"Flock Safety\"",
+    "search_type": "posts",
+    "max_results": 5,
+    "maxTotalChargeUsd": 0.03
+  }
+}

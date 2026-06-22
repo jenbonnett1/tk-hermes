@@ -64,17 +64,17 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 71
+        "completed": 72
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-03T19:28:59.777822+00:00",
-      "next_run_at": "2026-06-22T19:09:29.750741+00:00",
-      "last_run_at": "2026-06-22T13:09:29.750741+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "next_run_at": "2026-06-23T01:13:00.270636+00:00",
+      "last_run_at": "2026-06-22T19:13:00.270636+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": {
@@ -109,17 +109,17 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 68
+        "completed": 69
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-04T16:54:04.658765+00:00",
-      "next_run_at": "2026-06-22T19:08:21.926832+00:00",
-      "last_run_at": "2026-06-22T13:08:21.926832+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "next_run_at": "2026-06-23T01:10:52.416599+00:00",
+      "last_run_at": "2026-06-22T19:10:52.416599+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": {
@@ -136,14 +136,14 @@
     },
     {
       "id": "61cc9da25f0a",
-      "name": "Flock Safety Facebook/Instagram negative-post pilot monitor",
+      "name": "Flock Safety Facebook Apify posts monitor",
       "prompt": "",
       "skills": [],
       "skill": null,
       "model": null,
       "provider": null,
       "base_url": null,
-      "script": "run_flock_fb_ig_monitor.sh",
+      "script": "run_flock_apify_facebook_posts_monitor.sh",
       "no_agent": true,
       "context_from": null,
       "schedule": {
@@ -154,15 +154,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 22
+        "completed": 23
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-16T21:32:57.885203+00:00",
-      "next_run_at": "2026-06-22T15:44:56.677625+00:00",
-      "last_run_at": "2026-06-22T09:44:56.677625+00:00",
+      "next_run_at": "2026-06-23T01:16:03.324084+00:00",
+      "last_run_at": "2026-06-22T15:45:52.185595+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -177,5 +177,5 @@
       "workdir": null
     }
   ],
-  "updated_at": "2026-06-22T13:33:39.301337+00:00"
+  "updated_at": "2026-06-22T19:16:03.324391+00:00"
 }
