@@ -12,24 +12,24 @@
       "script": null,
       "context_from": null,
       "schedule": {
-        "kind": "interval",
-        "minutes": 360,
-        "display": "every 360m"
+        "kind": "cron",
+        "expr": "0 4,10,16,22 * * *",
+        "display": "0 4,10,16,22 * * *"
       },
-      "schedule_display": "every 360m",
+      "schedule_display": "0 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 79
+        "completed": 87
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-05-18T16:27:24.965576+00:00",
-      "next_run_at": "2026-06-22T19:33:39.299101+00:00",
-      "last_run_at": "2026-06-22T13:33:39.299101+00:00",
-      "last_status": "error",
-      "last_error": "RuntimeError: HTTP 402: Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits",
+      "next_run_at": "2026-06-24T22:00:00+00:00",
+      "last_run_at": "2026-06-24T16:03:19.902259+00:00",
+      "last_status": "ok",
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": {
@@ -64,15 +64,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 72
+        "completed": 79
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-03T19:28:59.777822+00:00",
-      "next_run_at": "2026-06-23T01:13:00.270636+00:00",
-      "last_run_at": "2026-06-22T19:13:00.270636+00:00",
+      "next_run_at": "2026-06-24T19:28:37.070108+00:00",
+      "last_run_at": "2026-06-24T13:28:37.070108+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -109,15 +109,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 69
+        "completed": 76
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-04T16:54:04.658765+00:00",
-      "next_run_at": "2026-06-23T01:10:52.416599+00:00",
-      "last_run_at": "2026-06-22T19:10:52.416599+00:00",
+      "next_run_at": "2026-06-24T19:25:56.563947+00:00",
+      "last_run_at": "2026-06-24T13:25:56.563947+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -147,22 +147,22 @@
       "no_agent": true,
       "context_from": null,
       "schedule": {
-        "kind": "interval",
-        "minutes": 360,
-        "display": "every 360m"
+        "kind": "cron",
+        "expr": "3 4,10,16,22 * * *",
+        "display": "3 4,10,16,22 * * *"
       },
-      "schedule_display": "every 360m",
+      "schedule_display": "3 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 23
+        "completed": 30
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-16T21:32:57.885203+00:00",
-      "next_run_at": "2026-06-23T01:16:03.324084+00:00",
-      "last_run_at": "2026-06-22T15:45:52.185595+00:00",
+      "next_run_at": "2026-06-24T22:03:00+00:00",
+      "last_run_at": "2026-06-24T16:04:47.870080+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -189,23 +189,23 @@
       "no_agent": true,
       "context_from": null,
       "schedule": {
-        "kind": "interval",
-        "minutes": 360,
-        "display": "every 360m"
+        "kind": "cron",
+        "expr": "6 4,10,16,22 * * *",
+        "display": "6 4,10,16,22 * * *"
       },
-      "schedule_display": "every 360m",
+      "schedule_display": "6 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 7
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:33.269797+00:00",
-      "next_run_at": "2026-06-23T01:30:33.269844+00:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T22:06:00+00:00",
+      "last_run_at": "2026-06-24T16:07:07.632784+00:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
@@ -231,23 +231,23 @@
       "no_agent": true,
       "context_from": null,
       "schedule": {
-        "kind": "interval",
-        "minutes": 360,
-        "display": "every 360m"
+        "kind": "cron",
+        "expr": "9 4,10,16,22 * * *",
+        "display": "9 4,10,16,22 * * *"
       },
-      "schedule_display": "every 360m",
+      "schedule_display": "9 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 7
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:40.257592+00:00",
-      "next_run_at": "2026-06-23T01:30:40.257642+00:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-06-24T22:09:00+00:00",
+      "last_run_at": "2026-06-24T16:09:41.537546+00:00",
+      "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
@@ -259,7 +259,138 @@
       },
       "enabled_toolsets": null,
       "workdir": null
+    },
+    {
+      "id": "b35f08f0050b",
+      "name": "Flock Safety Instagram/Reels Apify pilot monitor",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_apify_instagram_pilot.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "12 4,10,16,22 * * *",
+        "display": "12 4,10,16,22 * * *"
+      },
+      "schedule_display": "12 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-23T15:54:03.446026+00:00",
+      "next_run_at": "2026-06-24T22:12:00+00:00",
+      "last_run_at": "2026-06-24T16:12:55.169409+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "f875933cbd41",
+      "name": "Flock Safety TikTok Apify posts monitor",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_apify_tiktok_posts_monitor.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "15 4,10,16,22 * * *",
+        "display": "15 4,10,16,22 * * *"
+      },
+      "schedule_display": "15 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-23T16:02:02.718808+00:00",
+      "next_run_at": "2026-06-24T22:15:00+00:00",
+      "last_run_at": "2026-06-24T16:16:03.749903+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "9fa59b09f49e",
+      "name": "Flock Safety cross-platform customer-facing summary draft",
+      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest internal social/reputation monitoring reports. A data-collection script has printed a source packet containing the latest outputs from the Flock Safety monitors: X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, themes, or risk levels.\n2. Prepare ONE polished customer-facing email draft that TrybeMedia can forward/share with Flock Safety.\n3. Send the draft email via Himalaya SMTP to Jen and Genna only:\n   - To: jennifercbonnett@gmail.com\n   - Cc: gkeller@trevelinokeller.com\n   - From: Hermes Reports <hermes-agent@trybemedia.com>\n   - Use: HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send\n4. Also save the exact sent email body to /opt/data/social-monitors/customer-summaries/ with a timestamped .txt filename.\n\nCustomer-facing style requirements:\n- Subject format: `DRAFT: Flock Safety Social Listening Executive Summary \u2014 [date/time ET]`\n- Keep the body high-level and executive-ready.\n- Include sections:\n  A. Executive Summary\n  B. Cross-Platform Themes\n  C. Recommended Actions\n  D. Most Notable Posts / Threads\n  E. Monitoring Notes\n- Do NOT include internal implementation details such as Apify actor names, cost caps, job IDs, scripts, cron output paths, raw dataset IDs, or tool errors unless there is a customer-relevant data limitation.\n- Do NOT dump every post. Include only the most notable posts/threads across all platforms, ranked by customer relevance, severity, engagement, and novelty.\n- If a source platform had no findings, mention it briefly only in Monitoring Notes.\n- If X source output only provides a count/summary and not post-level details, use it at the theme/count level and do not invent X post details.\n- Frame recommended actions constructively: communications posture, customer-success readiness, FAQ/talking points, escalation candidates, monitoring follow-up.\n- Avoid alarmist language. Use careful wording like \u201cobserved,\u201d \u201cappears,\u201d \u201cearly signal,\u201d \u201climited public sample,\u201d and \u201cnot necessarily representative.\u201d\n\nAfter sending, your final response should be a short local summary with: email sent yes/no, subject, saved file path, and which source platforms were included.",
+      "skills": [
+        "social-risk-monitoring"
+      ],
+      "skill": "social-risk-monitoring",
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "collect_flock_customer_summary_inputs.py",
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "45 4,10,16,22 * * *",
+        "display": "45 4,10,16,22 * * *"
+      },
+      "schedule_display": "45 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 4
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-23T17:10:26.820811+00:00",
+      "next_run_at": "2026-06-24T22:45:00+00:00",
+      "last_run_at": "2026-06-24T16:45:05.963229+00:00",
+      "last_status": "error",
+      "last_error": "Blocked: prompt contains invisible unicode U+2060 (possible injection).",
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
     }
   ],
-  "updated_at": "2026-06-22T19:30:40.260422+00:00"
+  "updated_at": "2026-06-24T16:45:05.963886+00:00"
 }
