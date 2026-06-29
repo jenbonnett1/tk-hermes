@@ -19,15 +19,15 @@
       "schedule_display": "0 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 107
+        "completed": 108
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-05-18T16:27:24.965576+00:00",
-      "next_run_at": "2026-06-29T22:00:00+00:00",
-      "last_run_at": "2026-06-29T16:02:57.179439+00:00",
+      "next_run_at": "2026-06-30T04:00:00+00:00",
+      "last_run_at": "2026-06-29T22:02:53.975929+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -64,15 +64,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 99
+        "completed": 100
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-03T19:28:59.777822+00:00",
-      "next_run_at": "2026-06-29T21:33:01.070309+00:00",
-      "last_run_at": "2026-06-29T15:33:01.070309+00:00",
+      "next_run_at": "2026-06-30T03:34:45.805664+00:00",
+      "last_run_at": "2026-06-29T21:34:45.805664+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -109,15 +109,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 96
+        "completed": 97
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-04T16:54:04.658765+00:00",
-      "next_run_at": "2026-06-29T21:30:15.206507+00:00",
-      "last_run_at": "2026-06-29T15:30:15.206507+00:00",
+      "next_run_at": "2026-06-30T03:32:34.578991+00:00",
+      "last_run_at": "2026-06-29T21:32:34.578991+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -154,15 +154,15 @@
       "schedule_display": "3 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 50
+        "completed": 51
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-16T21:32:57.885203+00:00",
-      "next_run_at": "2026-06-29T22:03:00+00:00",
-      "last_run_at": "2026-06-29T16:04:16.697310+00:00",
+      "next_run_at": "2026-06-30T04:03:00+00:00",
+      "last_run_at": "2026-06-29T22:04:09.643833+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -196,15 +196,15 @@
       "schedule_display": "6 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 27
+        "completed": 28
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:33.269797+00:00",
-      "next_run_at": "2026-06-29T22:06:00+00:00",
-      "last_run_at": "2026-06-29T16:06:24.146187+00:00",
+      "next_run_at": "2026-06-30T04:06:00+00:00",
+      "last_run_at": "2026-06-29T22:06:16.817176+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -238,15 +238,15 @@
       "schedule_display": "9 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 27
+        "completed": 28
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:40.257592+00:00",
-      "next_run_at": "2026-06-29T22:09:00+00:00",
-      "last_run_at": "2026-06-29T16:09:39.717404+00:00",
+      "next_run_at": "2026-06-30T04:09:00+00:00",
+      "last_run_at": "2026-06-29T22:09:31.669518+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -280,15 +280,15 @@
       "schedule_display": "12 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 24
+        "completed": 25
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T15:54:03.446026+00:00",
-      "next_run_at": "2026-06-29T22:12:00+00:00",
-      "last_run_at": "2026-06-29T16:12:52.651342+00:00",
+      "next_run_at": "2026-06-30T04:12:00+00:00",
+      "last_run_at": "2026-06-29T22:12:41.416908+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -322,15 +322,15 @@
       "schedule_display": "15 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 24
+        "completed": 25
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T16:02:02.718808+00:00",
-      "next_run_at": "2026-06-29T22:15:00+00:00",
-      "last_run_at": "2026-06-29T16:16:01.417866+00:00",
+      "next_run_at": "2026-06-30T04:15:00+00:00",
+      "last_run_at": "2026-06-29T22:15:52.378605+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -366,15 +366,15 @@
       "schedule_display": "45 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 25
+        "completed": 26
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T17:10:26.820811+00:00",
-      "next_run_at": "2026-06-29T22:45:00+00:00",
-      "last_run_at": "2026-06-29T16:47:16.893356+00:00",
+      "next_run_at": "2026-06-30T04:45:00+00:00",
+      "last_run_at": "2026-06-29T22:47:48.287052+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -411,15 +411,15 @@
       "schedule_display": "20 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:50:51.828926+00:00",
-      "next_run_at": "2026-06-29T22:20:00+00:00",
-      "last_run_at": "2026-06-29T16:25:02.485896+00:00",
+      "next_run_at": "2026-06-30T04:20:00+00:00",
+      "last_run_at": "2026-06-29T22:22:30.078688+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -456,15 +456,15 @@
       "schedule_display": "23 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:50:57.319769+00:00",
-      "next_run_at": "2026-06-29T22:23:00+00:00",
-      "last_run_at": "2026-06-29T16:26:03.770681+00:00",
+      "next_run_at": "2026-06-30T04:23:00+00:00",
+      "last_run_at": "2026-06-29T22:23:31.216419+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -498,15 +498,15 @@
       "schedule_display": "26 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:50:58.330573+00:00",
-      "next_run_at": "2026-06-29T22:26:00+00:00",
-      "last_run_at": "2026-06-29T16:26:03.743935+00:00",
+      "next_run_at": "2026-06-30T04:26:00+00:00",
+      "last_run_at": "2026-06-29T22:26:32.852104+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -540,15 +540,15 @@
       "schedule_display": "29 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:50:59.336841+00:00",
-      "next_run_at": "2026-06-29T22:29:00+00:00",
-      "last_run_at": "2026-06-29T16:29:05.240210+00:00",
+      "next_run_at": "2026-06-30T04:29:00+00:00",
+      "last_run_at": "2026-06-29T22:29:34.805933+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -582,15 +582,15 @@
       "schedule_display": "32 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:51:04.324445+00:00",
-      "next_run_at": "2026-06-29T22:32:00+00:00",
-      "last_run_at": "2026-06-29T16:32:06.593329+00:00",
+      "next_run_at": "2026-06-30T04:32:00+00:00",
+      "last_run_at": "2026-06-29T22:32:36.599676+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -624,15 +624,15 @@
       "schedule_display": "35 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:51:05.332266+00:00",
-      "next_run_at": "2026-06-29T22:35:00+00:00",
-      "last_run_at": "2026-06-29T16:35:08.271795+00:00",
+      "next_run_at": "2026-06-30T04:35:00+00:00",
+      "last_run_at": "2026-06-29T22:35:38.062804+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -649,7 +649,7 @@
     {
       "id": "616353f8a2f5",
       "name": "Flock Safety general sentiment executive summary draft",
-      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest cross-platform GENERAL SENTIMENT social monitoring reports. A data-collection script has printed a source packet containing latest general-sentiment reports from X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, URLs, themes, or risk levels.\n2. Prepare one polished customer-facing email draft suitable for Trybe/TK to share with Flock Safety.\n3. Use the Pyramid Principle writing style throughout: lead with the bottom-line answer first, then organize support in a clear hierarchy. Do not build slowly toward the conclusion.\n4. The first paragraph under Executive Summary must be the top-line conclusion in 1-3 sentences: overall sentiment, what changed or matters most, and the recommended executive response.\n5. After the top-line conclusion, group support into 3-5 MECE-style key points/themes. Each theme should start with the takeaway sentence first, followed by concise evidence from the source reports.\n6. Include an overall sentiment score from 1-100 where 100 is fully positive and 1 is strongly negative. Explain in one concise sentence what drove the score.\n7. Include platform-level sentiment scores when available from the source reports.\n8. Structure the email with: Subject line, Executive Summary, Overall Sentiment Score, Key Themes, Recommended Actions, Most Notable Posts/Mentions, and Coverage Notes.\n9. Within Recommended Actions, lead with the recommendation first, then the rationale.\n10. Cover positive, mixed/neutral, and negative themes. Do not focus only on negative content.\n11. Include only the most notable posts/mentions, prioritizing strong sentiment, meaningful engagement, and customer-relevant themes. For each notable post, state why it matters before adding supporting detail.\n12. Keep implementation details out of the customer-facing email: no job IDs, actor names, dataset IDs, local file paths, cost caps, or debugging notes.\n13. Mention coverage limitations in plain language only.\n14. Send the draft email using Himalaya from `Hermes Reports <hermes-agent@trybemedia.com>` to `jennifercbonnett@gmail.com` and `gkeller@trevelinokeller.com`. Subject format: `DRAFT: Flock Safety General Sentiment Executive Summary \u2014 YYYY-MM-DD HH:MM AM/PM ET`.\n15. Save a copy of the final email body under `/opt/data/social-monitors/customer-summaries/` with a filename starting `flock_safety_general_sentiment_exec_summary_`.\n\nThis is a new separate sentiment-summary stream. The existing negative/risk executive summary remains unchanged.",
+      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest cross-platform GENERAL SENTIMENT social monitoring reports. A data-collection script has printed a source packet containing latest general-sentiment reports from X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, URLs, themes, or risk levels.\n2. Prepare one polished customer-facing email draft suitable for Trybe/TK to share with Flock Safety.\n3. Use the Pyramid Principle writing style throughout: lead with the bottom-line answer first, then organize support in a clear hierarchy. Do not build slowly toward the conclusion.\n4. Keep the report concise and executive-friendly. Target 700-900 words. It should feel materially shorter and easier to scan than a platform-monitor dump.\n5. The first paragraph under Executive Summary must be the BLUF/top-line answer in 1-3 sentences: overall sentiment, what changed or matters most, and the recommended executive response.\n6. After the BLUF, group support into exactly 3 key themes unless the source packet clearly requires 4. Each theme must start with the takeaway sentence first, followed by only the most important evidence.\n7. Include an overall sentiment score from 1-100 where 100 is fully positive and 1 is strongly negative. Explain in one concise sentence what drove the score.\n8. Include platform-level sentiment scores only as a compact bullet list or table. Do not over-explain every platform unless it materially changes the conclusion.\n9. Structure the email with: Subject line, Executive Summary, Overall Sentiment Score, Key Themes, Recommended Actions, Most Notable Posts/Mentions, and Coverage Notes.\n10. Within Recommended Actions, lead with the recommendation first, then the rationale. Limit to 3 action bullets unless the source packet clearly requires 4.\n11. Cover positive, mixed/neutral, and negative themes. Do not focus only on negative content.\n12. Include only the most notable posts/mentions: maximum 5 unless there is a clearly exceptional sixth. For each notable post, state why it matters before adding supporting detail.\n13. Avoid repeating the prior report's language when the underlying data is similar. Reframe around what the newest window changes, confirms, or reinforces.\n14. Keep implementation details out of the customer-facing email: no job IDs, actor names, dataset IDs, local file paths, cost caps, or debugging notes.\n15. Mention coverage limitations in plain language only, and keep Coverage Notes to 2-3 sentences.\n16. Send the draft email using Himalaya from `Hermes Reports <hermes-agent@trybemedia.com>` to `jennifercbonnett@gmail.com` and `gkeller@trevelinokeller.com`. Subject format: `DRAFT: Flock Safety General Sentiment Executive Summary \u2014 YYYY-MM-DD HH:MM AM/PM ET`.\n17. Save a copy of the final email body under `/opt/data/social-monitors/customer-summaries/` with a filename starting `flock_safety_general_sentiment_exec_summary_`.\n\nThis is a new separate sentiment-summary stream. The existing negative/risk executive summary remains unchanged.",
       "skills": [
         "social-risk-monitoring"
       ],
@@ -668,15 +668,15 @@
       "schedule_display": "55 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 1
+        "completed": 2
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-29T14:51:42.269840+00:00",
-      "next_run_at": "2026-06-29T22:55:00+00:00",
-      "last_run_at": "2026-06-29T16:57:59.770496+00:00",
+      "next_run_at": "2026-06-30T04:55:00+00:00",
+      "last_run_at": "2026-06-29T22:58:07.128610+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -694,5 +694,5 @@
       "workdir": null
     }
   ],
-  "updated_at": "2026-06-29T19:44:34.914215+00:00"
+  "updated_at": "2026-06-29T23:49:59.784141+00:00"
 }
