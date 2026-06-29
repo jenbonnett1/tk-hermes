@@ -3,7 +3,7 @@
     {
       "id": "60877de454f9",
       "name": "Flock Safety X negative-post PR monitor",
-      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Flock Safety and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Flock Safety X Risk Monitor — [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Flock Safety\n- X.com handle: @Flock_Safety\n- Treat references to \"Flock Safety\", \"FlockSafety\", \"Flock cameras\", \"Flock license plate readers\", \"Flock LPR\", and @Flock_Safety as potentially relevant when context clearly points to the company.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Flock Safety. Use one or more queries such as:\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety OR \"Flock cameras\" OR \"Flock LPR\" OR \"license plate readers\") (bad OR terrible OR awful OR hate OR broken OR outage OR unsafe OR dangerous OR privacy OR surveillance OR creepy OR lawsuit OR unconstitutional OR unethical OR disappointed OR cancelled OR boycott OR scam OR police OR data OR breach) -is:retweet lang:en`\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety) (criticism OR concerns OR backlash OR controversy OR complaint OR \"not good\" OR \"don't trust\" OR privacy OR surveillance OR lawsuit OR police) -is:retweet lang:en`\n   - `(@Flock_Safety OR \"Flock Safety\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Flock Safety the company. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, policy concern, privacy/surveillance concern, civil-liberties concern, security/data concern, legal/regulatory concern, product reliability complaint, law-enforcement/community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/flock_safety_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Flock Safety X Risk Monitor — No Negative Threats — [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor — No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Flock Safety were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Flock Safety X Risk Monitor — [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor — [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as privacy/surveillance, policing/civil liberties, data/security, product reliability, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Flock Safety and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Flock Safety X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Flock Safety\n- X.com handle: @Flock_Safety\n- Treat references to \"Flock Safety\", \"FlockSafety\", \"Flock cameras\", \"Flock license plate readers\", \"Flock LPR\", and @Flock_Safety as potentially relevant when context clearly points to the company.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Flock Safety. Use one or more queries such as:\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety OR \"Flock cameras\" OR \"Flock LPR\" OR \"license plate readers\") (bad OR terrible OR awful OR hate OR broken OR outage OR unsafe OR dangerous OR privacy OR surveillance OR creepy OR lawsuit OR unconstitutional OR unethical OR disappointed OR cancelled OR boycott OR scam OR police OR data OR breach) -is:retweet lang:en`\n   - `(\"Flock Safety\" OR @Flock_Safety OR FlockSafety) (criticism OR concerns OR backlash OR controversy OR complaint OR \"not good\" OR \"don't trust\" OR privacy OR surveillance OR lawsuit OR police) -is:retweet lang:en`\n   - `(@Flock_Safety OR \"Flock Safety\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Flock Safety the company. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, policy concern, privacy/surveillance concern, civil-liberties concern, security/data concern, legal/regulatory concern, product reliability complaint, law-enforcement/community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/flock_safety_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Flock Safety X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Flock Safety were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Flock Safety X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Flock Safety X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as privacy/surveillance, policing/civil liberties, data/security, product reliability, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -19,15 +19,15 @@
       "schedule_display": "0 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 87
+        "completed": 106
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-05-18T16:27:24.965576+00:00",
-      "next_run_at": "2026-06-24T22:00:00+00:00",
-      "last_run_at": "2026-06-24T16:03:19.902259+00:00",
+      "next_run_at": "2026-06-29T16:00:00+00:00",
+      "last_run_at": "2026-06-29T10:02:55.653075+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -47,7 +47,7 @@
     {
       "id": "f5fe98b2f004",
       "name": "Belgard Hardscapes X negative-post PR monitor",
-      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Belgard Hardscapes and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Belgard Hardscapes X Risk Monitor — [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Belgard Hardscapes\n- X.com handle: @Belgard\n- Treat references to \"Belgard\", \"Belgard Hardscapes\", \"Belgard pavers\", \"Belgard outdoor living\", \"Belgard retaining walls\", \"Belgard hardscape\", and @Belgard as potentially relevant when context clearly points to the company/brand.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Belgard Hardscapes. Use one or more queries such as:\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard OR \"Belgard pavers\" OR \"Belgard outdoor living\" OR \"Belgard retaining walls\") (bad OR terrible OR awful OR hate OR broken OR cracked OR defective OR warranty OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR poor OR problem OR problems OR failing OR failed OR delay OR cancelled OR boycott) -is:retweet lang:en`\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR warranty OR contractor OR dealer OR installer OR pavers OR hardscape) -is:retweet lang:en`\n   - `(@Belgard OR \"Belgard Hardscapes\" OR \"Belgard\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Belgard Hardscapes the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, dealer/contractor/installer concern, product quality or reliability complaint, warranty or service complaint, supply/delivery issue, legal/regulatory concern, safety concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/belgard_hardscapes_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor — No Negative Threats — [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor — No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Belgard Hardscapes were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor — [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor — [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/reliability, warranty/service, contractor/dealer/installer experience, supply/delivery issues, pricing/value, safety, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Belgard Hardscapes and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Belgard Hardscapes\n- X.com handle: @Belgard\n- Treat references to \"Belgard\", \"Belgard Hardscapes\", \"Belgard pavers\", \"Belgard outdoor living\", \"Belgard retaining walls\", \"Belgard hardscape\", and @Belgard as potentially relevant when context clearly points to the company/brand.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Belgard Hardscapes. Use one or more queries such as:\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard OR \"Belgard pavers\" OR \"Belgard outdoor living\" OR \"Belgard retaining walls\") (bad OR terrible OR awful OR hate OR broken OR cracked OR defective OR warranty OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR poor OR problem OR problems OR failing OR failed OR delay OR cancelled OR boycott) -is:retweet lang:en`\n   - `(\"Belgard\" OR \"Belgard Hardscapes\" OR @Belgard) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR warranty OR contractor OR dealer OR installer OR pavers OR hardscape) -is:retweet lang:en`\n   - `(@Belgard OR \"Belgard Hardscapes\" OR \"Belgard\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, and posts not actually about Belgard Hardscapes the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, dealer/contractor/installer concern, product quality or reliability complaint, warranty or service complaint, supply/delivery issue, legal/regulatory concern, safety concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/belgard_hardscapes_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Belgard Hardscapes were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Belgard Hardscapes X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/reliability, warranty/service, contractor/dealer/installer experience, supply/delivery issues, pricing/value, safety, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -64,15 +64,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 79
+        "completed": 98
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-03T19:28:59.777822+00:00",
-      "next_run_at": "2026-06-24T19:28:37.070108+00:00",
-      "last_run_at": "2026-06-24T13:28:37.070108+00:00",
+      "next_run_at": "2026-06-29T15:31:28.591768+00:00",
+      "last_run_at": "2026-06-29T09:31:28.591768+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -92,7 +92,7 @@
     {
       "id": "d7229aa0b9c2",
       "name": "Johnston & Murphy X negative-post PR monitor",
-      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Johnston & Murphy and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Johnston & Murphy X Risk Monitor — [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Johnston & Murphy\n- X.com handle: @johnstonmurphy\n- Treat references to \"Johnston & Murphy\", \"Johnston and Murphy\", \"Johnston Murphy\", \"J&M shoes\", \"J&M boots\", \"J&M apparel\", \"J&M\" only when context clearly points to the brand, and @johnstonmurphy as potentially relevant.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Johnston & Murphy. Use one or more queries such as:\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy OR \"J&M shoes\" OR \"J&M boots\") (bad OR terrible OR awful OR hate OR broken OR defective OR uncomfortable OR painful OR blisters OR quality OR poor OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR problem OR problems OR falling OR failed OR delay OR cancelled OR boycott OR return OR refund OR warranty OR customer service) -is:retweet lang:en`\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR quality OR shoes OR boots OR apparel OR customer service OR return OR refund OR shipping) -is:retweet lang:en`\n   - `(@johnstonmurphy OR \"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, fashion commentary that is not negative, and posts not actually about Johnston & Murphy the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, product quality or comfort complaint, sizing/fit complaint, durability complaint, warranty/service complaint, shipping/delivery issue, returns/refunds concern, pricing/value concern, legal/regulatory concern, store experience concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/johnston_murphy_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor — No Negative Threats — [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor — No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Johnston & Murphy were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor — [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor — [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/durability, fit/comfort, customer service, returns/refunds, shipping/delivery, pricing/value, store experience, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
+      "prompt": "Every 6 hours, monitor X.com for recent negative posts about Johnston & Murphy and email Jen every run using the dedicated TrybeMedia Hermes email account. If meaningful negative posts are found, send the full risk report. If no meaningful negative posts are found, send a quick no-threat report stating that no negative threats were found.\n\nEmail destination:\n- Send all monitor reports from `Hermes Reports <hermes-agent@trybemedia.com>` to Jen at jennifercbonnett@gmail.com only using the configured Himalaya SMTP/IMAP account named `hermes`.\n- Use Himalaya SMTP, not Google Workspace OAuth/Gmail API. Himalaya is installed at `/opt/data/profiles/tk/home/.local/bin/himalaya` and configured in `/opt/data/profiles/tk/home/.config/himalaya/config.toml`.\n- Send email non-interactively by writing a plain-text RFC822/MML message to a temp file and piping it to Himalaya, for example:\n  ```bash\n  cat > /tmp/x-risk-report-email.txt <<'EMAIL'\n  From: Hermes Reports <hermes-agent@trybemedia.com>\n  To: jennifercbonnett@gmail.com\n  Subject: Johnston & Murphy X Risk Monitor \u2014 [date/time ET]\n\n  [plain-text report body]\n  EMAIL\n  HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send < /tmp/x-risk-report-email.txt\n  ```\n- Do not send Telegram messages. The cron job delivery target is local-only; the user-facing report should be the Himalaya SMTP email above.\n\nTarget company:\n- Company: Johnston & Murphy\n- X.com handle: @johnstonmurphy\n- Treat references to \"Johnston & Murphy\", \"Johnston and Murphy\", \"Johnston Murphy\", \"J&M shoes\", \"J&M boots\", \"J&M apparel\", \"J&M\" only when context clearly points to the brand, and @johnstonmurphy as potentially relevant.\n\nSelf-contained workflow:\n1. Use the official X/Twitter CLI `xurl`. In this Docker environment the working authenticated install is `/opt/data/home/.local/bin/xurl`, and it MUST be run with `HOME=/opt/data/home` so it can read the correct OAuth token store. Do not use the profile-local `xurl` on PATH (`/opt/data/profiles/tk/home/.local/bin/xurl`), because that wrapper is broken/misconfigured. First run only `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --help` and `HOME=/opt/data/home /opt/data/home/.local/bin/xurl auth status`; for actual reads/searches use `HOME=/opt/data/home /opt/data/home/.local/bin/xurl ...`. Never read or print `~/.xurl`, never use verbose flags, and never pass inline credentials/secrets.\n2. If `xurl` is unavailable, auth is not configured, or X API search is blocked by credits/permissions/rate limits, send a concise setup-needed/blocked email to jennifercbonnett@gmail.com only, explaining what failed. Do not invent findings.\n3. Search X recent posts for English-language negative commentary about Johnston & Murphy. Use one or more queries such as:\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy OR \"J&M shoes\" OR \"J&M boots\") (bad OR terrible OR awful OR hate OR broken OR defective OR uncomfortable OR painful OR blisters OR quality OR poor OR complaint OR complaints OR disappointed OR scam OR lawsuit OR unsafe OR dangerous OR problem OR problems OR falling OR failed OR delay OR cancelled OR boycott OR return OR refund OR warranty OR customer service) -is:retweet lang:en`\n   - `(\"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\" OR @johnstonmurphy) (criticism OR concerns OR backlash OR controversy OR complaint OR complaints OR \"not good\" OR \"don't trust\" OR quality OR shoes OR boots OR apparel OR customer service OR return OR refund OR shipping) -is:retweet lang:en`\n   - `(@johnstonmurphy OR \"Johnston & Murphy\" OR \"Johnston and Murphy\" OR \"Johnston Murphy\") -is:retweet lang:en`\n   Retrieve up to about 50 results if possible. Prefer posts from the last 6 hours. If the CLI cannot filter by time, use recent search results and timestamps if present.\n   To capture author follower counts, prefer using the raw X API recent-search endpoint through xurl with expansions/user fields, for example:\n   `HOME=/opt/data/home /opt/data/home/.local/bin/xurl --app 2056816846112735233jen_bonnett '/2/tweets/search/recent?query=[URL_ENCODED_QUERY]&max_results=50&tweet.fields=created_at,public_metrics,author_id&expansions=author_id&user.fields=username,name,public_metrics,verified'`\n   Parse `includes.users[].public_metrics.followers_count` by matching each tweet's `author_id`. If raw endpoint access fails but the shortcut search works, fall back to shortcut search and mark follower count as unavailable rather than failing the whole monitor.\n\n4. Filter out irrelevant posts, neutral news, spam, duplicates, obvious bot/engagement bait, fashion commentary that is not negative, and posts not actually about Johnston & Murphy the company/brand. Treat a post as relevant only if it expresses criticism, concern, frustration, reputational risk, accusation, customer impact, product quality or comfort complaint, sizing/fit complaint, durability complaint, warranty/service complaint, shipping/delivery issue, returns/refunds concern, pricing/value concern, legal/regulatory concern, store experience concern, community backlash, or similar negative sentiment.\n5. Maintain a local state file at `~/.cache/hermes/johnston_murphy_x_negative_seen_ids.txt` containing X post IDs already reported. Before reporting, skip IDs already in that file. After reporting, append newly reported IDs. Create the parent directory if needed. If the state file cannot be written, still email findings and mention that deduplication state could not be saved.\n6. If no new meaningful negative posts are found, send a quick no-threat email report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor \u2014 No Negative Threats \u2014 [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor \u2014 No Negative Threats`\n   - One-sentence summary: `No new meaningful negative X posts or negative threats about Johnston & Murphy were found in this monitoring run.`\n   - Include the search window/date-time checked and a note that the monitor will continue watching.\n   - Keep this report brief; do not include long methodology unless there was a setup/API issue.\n7. If new meaningful negative posts are found, draft and send a concise PR/customer-risk report to jennifercbonnett@gmail.com only. Email format:\n   - Subject: `Johnston & Murphy X Risk Monitor \u2014 [date/time ET]`\n   - Body title: `Johnston & Murphy X Risk Monitor \u2014 [date/time ET]`\n   - Executive summary: 2-3 bullets on the overall pattern.\n   - Themes: group the criticism into themes such as product quality/durability, fit/comfort, customer service, returns/refunds, shipping/delivery, pricing/value, store experience, legal/regulatory, customer/community backlash, misinformation risk, or competitive positioning.\n   - Suggested PR/customer-success actions: practical next steps, response posture, monitoring recommendation, and whether outreach/escalation is warranted.\n   - Notable posts: each with author/handle if available, author follower count if available, timestamp if available, link or post ID, concise paraphrase, engagement metrics (reply/like/retweet/quote counts if available), and why it matters. Use follower count together with engagement/replies to judge whether a response or escalation is warranted.\n   - Keep it factual and do not overstate virality or sentiment beyond the observed posts.\n8. Do not post, reply, like, follow, DM, or otherwise write to X. This monitor is read-only.\n9. After attempting to send the Gmail report, include a short local cron summary stating whether the no-threat or alert email was sent, the Gmail API response id/threadId if available, and how many new posts were included. This local summary should not be delivered to Telegram.",
       "skills": [],
       "skill": null,
       "model": null,
@@ -109,15 +109,15 @@
       "schedule_display": "every 360m",
       "repeat": {
         "times": null,
-        "completed": 76
+        "completed": 95
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-04T16:54:04.658765+00:00",
-      "next_run_at": "2026-06-24T19:25:56.563947+00:00",
-      "last_run_at": "2026-06-24T13:25:56.563947+00:00",
+      "next_run_at": "2026-06-29T15:29:07.235179+00:00",
+      "last_run_at": "2026-06-29T09:29:07.235179+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -154,15 +154,15 @@
       "schedule_display": "3 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 30
+        "completed": 49
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-16T21:32:57.885203+00:00",
-      "next_run_at": "2026-06-24T22:03:00+00:00",
-      "last_run_at": "2026-06-24T16:04:47.870080+00:00",
+      "next_run_at": "2026-06-29T16:03:00+00:00",
+      "last_run_at": "2026-06-29T10:04:11.301357+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -196,15 +196,15 @@
       "schedule_display": "6 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 7
+        "completed": 26
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:33.269797+00:00",
-      "next_run_at": "2026-06-24T22:06:00+00:00",
-      "last_run_at": "2026-06-24T16:07:07.632784+00:00",
+      "next_run_at": "2026-06-29T16:06:00+00:00",
+      "last_run_at": "2026-06-29T10:06:18.010946+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -238,15 +238,15 @@
       "schedule_display": "9 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 7
+        "completed": 26
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-22T19:30:40.257592+00:00",
-      "next_run_at": "2026-06-24T22:09:00+00:00",
-      "last_run_at": "2026-06-24T16:09:41.537546+00:00",
+      "next_run_at": "2026-06-29T16:09:00+00:00",
+      "last_run_at": "2026-06-29T10:09:32.656094+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -280,15 +280,15 @@
       "schedule_display": "12 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 23
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T15:54:03.446026+00:00",
-      "next_run_at": "2026-06-24T22:12:00+00:00",
-      "last_run_at": "2026-06-24T16:12:55.169409+00:00",
+      "next_run_at": "2026-06-29T16:12:00+00:00",
+      "last_run_at": "2026-06-29T10:12:46.848112+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -322,15 +322,15 @@
       "schedule_display": "15 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 23
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T16:02:02.718808+00:00",
-      "next_run_at": "2026-06-24T22:15:00+00:00",
-      "last_run_at": "2026-06-24T16:16:03.749903+00:00",
+      "next_run_at": "2026-06-29T16:15:00+00:00",
+      "last_run_at": "2026-06-29T10:15:57.466425+00:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -347,7 +347,7 @@
     {
       "id": "9fa59b09f49e",
       "name": "Flock Safety cross-platform customer-facing summary draft",
-      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest internal social/reputation monitoring reports. A data-collection script has printed a source packet containing the latest outputs from the Flock Safety monitors: X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, themes, or risk levels.\n2. Prepare ONE polished customer-facing email draft that TrybeMedia can forward/share with Flock Safety.\n3. Send the draft email via Himalaya SMTP to Jen and Genna only:\n   - To: jennifercbonnett@gmail.com\n   - Cc: gkeller@trevelinokeller.com\n   - From: Hermes Reports <hermes-agent@trybemedia.com>\n   - Use: HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send\n4. Also save the exact sent email body to /opt/data/social-monitors/customer-summaries/ with a timestamped .txt filename.\n\nCustomer-facing style requirements:\n- Subject format: `DRAFT: Flock Safety Social Listening Executive Summary — [date/time ET]`\n- Keep the body high-level and executive-ready.\n- Include sections:\n  A. Executive Summary\n  B. Cross-Platform Themes\n  C. Recommended Actions\n  D. Most Notable Posts / Threads\n  E. Monitoring Notes\n- Do NOT include internal implementation details such as Apify actor names, cost caps, job IDs, scripts, cron output paths, raw dataset IDs, or tool errors unless there is a customer-relevant data limitation.\n- Do NOT dump every post. Include only the most notable posts/threads across all platforms, ranked by customer relevance, severity, engagement, and novelty.\n- If a source platform had no findings, mention it briefly only in Monitoring Notes.\n- If X source output only provides a count/summary and not post-level details, use it at the theme/count level and do not invent X post details.\n- Frame recommended actions constructively: communications posture, customer-success readiness, FAQ/talking points, escalation candidates, monitoring follow-up.\n- Avoid alarmist language. Use careful wording like “observed,” “appears,” “early signal,” “limited public sample,” and “not necessarily representative.”\n\nAfter sending, your final response should be a short local summary with: email sent yes/no, subject, saved file path, and which source platforms were included.",
+      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest internal social/reputation monitoring reports. A data-collection script has printed a source packet containing the latest outputs from the Flock Safety monitors: X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, themes, or risk levels.\n2. Prepare ONE polished customer-facing email draft that TrybeMedia can forward/share with Flock Safety.\n3. Send the draft email via Himalaya SMTP to Jen and Genna only:\n   - To: jennifercbonnett@gmail.com\n   - Cc: gkeller@trevelinokeller.com\n   - From: Hermes Reports <hermes-agent@trybemedia.com>\n   - Use: HIMALAYA_CONFIG=/opt/data/profiles/tk/home/.config/himalaya/config.toml /opt/data/profiles/tk/home/.local/bin/himalaya template send\n4. Also save the exact sent email body to /opt/data/social-monitors/customer-summaries/ with a timestamped .txt filename.\n\nCustomer-facing style requirements:\n- Subject format: `DRAFT: Flock Safety Social Listening Executive Summary \u2014 [date/time ET]`\n- Keep the body high-level and executive-ready.\n- Include sections:\n  A. Executive Summary\n  B. Cross-Platform Themes\n  C. Recommended Actions\n  D. Most Notable Posts / Threads\n  E. Monitoring Notes\n- Do NOT include internal implementation details such as Apify actor names, cost caps, job IDs, scripts, cron output paths, raw dataset IDs, or tool errors unless there is a customer-relevant data limitation.\n- Do NOT dump every post. Include only the most notable posts/threads across all platforms, ranked by customer relevance, severity, engagement, and novelty.\n- If a source platform had no findings, mention it briefly only in Monitoring Notes.\n- If X source output only provides a count/summary and not post-level details, use it at the theme/count level and do not invent X post details.\n- Frame recommended actions constructively: communications posture, customer-success readiness, FAQ/talking points, escalation candidates, monitoring follow-up.\n- Avoid alarmist language. Use careful wording like \u201cobserved,\u201d \u201cappears,\u201d \u201cearly signal,\u201d \u201climited public sample,\u201d and \u201cnot necessarily representative.\u201d\n\nAfter sending, your final response should be a short local summary with: email sent yes/no, subject, saved file path, and which source platforms were included.",
       "skills": [
         "social-risk-monitoring"
       ],
@@ -366,17 +366,319 @@
       "schedule_display": "45 4,10,16,22 * * *",
       "repeat": {
         "times": null,
-        "completed": 4
+        "completed": 24
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-23T17:10:26.820811+00:00",
-      "next_run_at": "2026-06-24T22:45:00+00:00",
-      "last_run_at": "2026-06-24T16:45:05.963229+00:00",
-      "last_status": "error",
-      "last_error": "Blocked: prompt contains invisible unicode U+2060 (possible injection).",
+      "next_run_at": "2026-06-29T16:45:00+00:00",
+      "last_run_at": "2026-06-29T14:22:16.791843+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "a31eb876a0b1",
+      "name": "Flock Safety X general sentiment monitor",
+      "prompt": "Every 6 hours, monitor X.com for recent public posts about Flock Safety for GENERAL SENTIMENT, not just negative mentions. Search for recent posts containing brand terms such as \"Flock Safety\", \"Flock cameras\", \"Flock LPR\", \"Flock license plate reader\", and @Flock_Safety. Use the existing authenticated xurl command via `HOME=/opt/data/home /opt/data/home/.local/bin/xurl` if available. Do not print or expose tokens. Classify relevant posts as positive, mixed/neutral, or negative and assign a sentiment score from 1-100 where 100 is fully positive and 1 is strongly negative. Include notable positive and negative posts, engagement where available, URLs, and a brief rationale. Deduplicate against a local state file under `/opt/data/social-monitors/state/sentiment/flock_safety_x_sentiment_seen.json` so repeat runs do not resend the same X URLs. Send an email report every run from `Hermes Reports <hermes-agent@trybemedia.com>` using Himalaya (`/opt/data/profiles/tk/home/.local/bin/himalaya`, config `/opt/data/profiles/tk/home/.config/himalaya/config.toml`) to `jennifercbonnett@gmail.com` only. Subject format: `Flock Safety X General Sentiment \u2014 Score NN/100 \u2014 YYYY-MM-DD HH:MM AM/PM ET`. Save any local audit/output files under `/opt/data/social-monitors/sentiment/x/`. Keep the report internal; do not include implementation secrets.",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "20 4,10,16,22 * * *",
+        "display": "20 4,10,16,22 * * *"
+      },
+      "schedule_display": "20 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:50:51.828926+00:00",
+      "next_run_at": "2026-06-29T16:20:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null
+    },
+    {
+      "id": "410b4e5bab3f",
+      "name": "Flock Safety Facebook general sentiment report",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_sentiment_facebook_report.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "23 4,10,16,22 * * *",
+        "display": "23 4,10,16,22 * * *"
+      },
+      "schedule_display": "23 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:50:57.319769+00:00",
+      "next_run_at": "2026-06-29T16:23:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "bbce45d7a268",
+      "name": "Flock Safety LinkedIn general sentiment report",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_sentiment_linkedin_report.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "26 4,10,16,22 * * *",
+        "display": "26 4,10,16,22 * * *"
+      },
+      "schedule_display": "26 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:50:58.330573+00:00",
+      "next_run_at": "2026-06-29T16:26:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "2e573de822fc",
+      "name": "Flock Safety Reddit general sentiment report",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_sentiment_reddit_report.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "29 4,10,16,22 * * *",
+        "display": "29 4,10,16,22 * * *"
+      },
+      "schedule_display": "29 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:50:59.336841+00:00",
+      "next_run_at": "2026-06-29T16:29:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "7d70695581b9",
+      "name": "Flock Safety Instagram/Reels general sentiment report",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_sentiment_instagram_report.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "32 4,10,16,22 * * *",
+        "display": "32 4,10,16,22 * * *"
+      },
+      "schedule_display": "32 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:51:04.324445+00:00",
+      "next_run_at": "2026-06-29T16:32:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "28d80dc3528e",
+      "name": "Flock Safety TikTok general sentiment report",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "run_flock_sentiment_tiktok_report.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "35 4,10,16,22 * * *",
+        "display": "35 4,10,16,22 * * *"
+      },
+      "schedule_display": "35 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:51:05.332266+00:00",
+      "next_run_at": "2026-06-29T16:35:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "slack",
+        "chat_id": "D0BATSR5H1R",
+        "chat_name": "D0BATSR5H1R",
+        "thread_id": "1781634846.611529"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "616353f8a2f5",
+      "name": "Flock Safety general sentiment executive summary draft",
+      "prompt": "You are preparing a CUSTOMER-FACING executive email draft for Flock Safety based on the latest cross-platform GENERAL SENTIMENT social monitoring reports. A data-collection script has printed a source packet containing latest general-sentiment reports from X, Facebook, LinkedIn, Reddit, Instagram/Reels, and TikTok.\n\nTask:\n1. Review the source packet carefully. Use only facts present in the source packet. Do not invent posts, authors, engagement, URLs, themes, or risk levels.\n2. Prepare one polished customer-facing email draft suitable for Trybe/TK to share with Flock Safety.\n3. Include an overall sentiment score from 1-100 where 100 is fully positive and 1 is strongly negative. Explain in one concise sentence what drove the score.\n4. Include platform-level sentiment scores when available from the source reports.\n5. Structure the email with: Subject line, Executive Summary, Overall Sentiment Score, Key Themes, Recommended Actions, Most Notable Posts/Mentions, and Coverage Notes.\n6. Cover positive, mixed/neutral, and negative themes. Do not focus only on negative content.\n7. Include only the most notable posts/mentions, prioritizing strong sentiment, meaningful engagement, and customer-relevant themes.\n8. Keep implementation details out of the customer-facing email: no job IDs, actor names, dataset IDs, local file paths, cost caps, or debugging notes.\n9. Mention coverage limitations in plain language only.\n10. Send the draft email using Himalaya from `Hermes Reports <hermes-agent@trybemedia.com>` to `jennifercbonnett@gmail.com` and `gkeller@trevelinokeller.com`. Subject format: `DRAFT: Flock Safety General Sentiment Executive Summary \u2014 YYYY-MM-DD HH:MM AM/PM ET`.\n11. Save a copy of the final email body under `/opt/data/social-monitors/customer-summaries/` with a filename starting `flock_safety_general_sentiment_exec_summary_`.\n\nThis is a new separate sentiment-summary stream. The existing negative/risk executive summary remains unchanged.",
+      "skills": [
+        "social-risk-monitoring"
+      ],
+      "skill": "social-risk-monitoring",
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "collect_flock_sentiment_summary_inputs.py",
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "55 4,10,16,22 * * *",
+        "display": "55 4,10,16,22 * * *"
+      },
+      "schedule_display": "55 4,10,16,22 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-29T14:51:42.269840+00:00",
+      "next_run_at": "2026-06-29T16:55:00+00:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
       "last_delivery_error": null,
       "deliver": "local",
       "origin": {
@@ -392,5 +694,5 @@
       "workdir": null
     }
   ],
-  "updated_at": "2026-06-29T14:30:00+00:00"
+  "updated_at": "2026-06-29T14:51:42.271652+00:00"
 }
