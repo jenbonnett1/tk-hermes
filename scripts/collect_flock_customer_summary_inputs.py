@@ -13,6 +13,15 @@ import json
 
 CRON_OUTPUT = Path("/opt/data/profiles/tk/cron/output")
 MAX_CHARS_PER_REPORT = 9000
+# Cron's prompt-injection scanner rejects invisible Unicode such as emoji
+# zero-width joiners (U+200D). Social captions may legitimately contain them,
+# so strip them from collected source text before handing it to the LLM job.
+INVISIBLE_UNICODE_TRANSLATION = {
+    ord("\u200b"): None,  # zero-width space
+    ord("\u200c"): None,  # zero-width non-joiner
+    ord("\u200d"): None,  # zero-width joiner
+    ord("\ufeff"): None,  # byte order mark / zero-width no-break space
+}
 
 JOBS = [
     ("X", "60877de454f9", "Flock Safety X negative-post PR monitor"),
@@ -39,6 +48,7 @@ def read_limited(path: Path) -> str:
     marker = "\n## Response\n"
     if marker in text:
         text = text.split(marker, 1)[1].strip()
+    text = text.translate(INVISIBLE_UNICODE_TRANSLATION)
     if len(text) <= MAX_CHARS_PER_REPORT:
         return text
     return text[:MAX_CHARS_PER_REPORT] + "\n\n[TRUNCATED by collector for length]\n"
