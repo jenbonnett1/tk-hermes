@@ -426,10 +426,11 @@ def render_report(brand_name: str, platforms: list[str], findings: list[Finding]
 
 
 def send_email(to: list[str], cc: list[str], subject: str, body: str) -> str:
+    cc_header = f"Cc: {', '.join(cc)}\n" if cc else ""
     message = (
         "From: Hermes Reports <hermes-agent@trybemedia.com>\n"
         f"To: {', '.join(to)}\n"
-        f"Cc: {', '.join(cc)}\n"
+        f"{cc_header}"
         f"Subject: {subject}\n\n"
         f"{body}\n"
     )

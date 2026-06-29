@@ -277,7 +277,8 @@ def render_report(brand_name: str, query: str, run: dict, findings: list[LinkedI
 
 
 def send_email(to: list[str], cc: list[str], subject: str, body: str) -> str:
-    message = "From: Hermes Reports <hermes-agent@trybemedia.com>\n" + f"To: {', '.join(to)}\n" + f"Cc: {', '.join(cc)}\n" + f"Subject: {subject}\n\n{body}\n"
+    cc_header = f"Cc: {', '.join(cc)}\n" if cc else ""
+    message = "From: Hermes Reports <hermes-agent@trybemedia.com>\n" + f"To: {', '.join(to)}\n" + cc_header + f"Subject: {subject}\n\n{body}\n"
     with tempfile.NamedTemporaryFile("w", delete=False, prefix="apify-linkedin-monitor-email-", suffix=".txt") as f:
         f.write(message); msg_path = f.name
     env = os.environ.copy(); env["HIMALAYA_CONFIG"] = str(HIMALAYA_CONFIG)
